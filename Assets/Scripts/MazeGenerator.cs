@@ -173,7 +173,7 @@ public class MazeGenerator
         {
             for (int j = 0; j < maze.GetLength(1); j++)
             {
-                sb.Append(maze[i, j] == 0 ? ".." : "##");
+                sb.Append(maze[i, j] == 0 ? "." : "#");
             }
             sb.Append("\n");
         }

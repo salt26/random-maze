@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices.ComTypes;
+using Cinemachine;
 
 public class GameController : MonoBehaviour
 {
@@ -16,11 +17,16 @@ public class GameController : MonoBehaviour
     public GameObject colliderCorner;
     public GameObject colliderEdge;
     public GameObject colliderExit;
+    public GameObject playerPrefab;
     public Text timeText;
+    public DistanceSlider progressSlider;
     public AudioClip exitClip;
     public AudioClip timeoutClip;
+    public Camera mainCamera;
+    public CinemachineVirtualCamera virtualCamera;
 
     public float initialTime = 300f;
+    public Vector3 initialPlayerPosition;
 
     public bool mazeFromFile = false;
 
@@ -34,6 +40,10 @@ public class GameController : MonoBehaviour
     private bool hasExited = false;
     private bool hasPressedShift = false;
     private bool isTimeout = false;
+    private Vector2 distanceMaxValue;
+    private Vector2 distanceCurrentValue;
+
+    private SwatMovement player;
 
     void Awake()
     {
@@ -42,6 +52,10 @@ public class GameController : MonoBehaviour
             Destroy(gc.gameObject);
         }
         gc = this;
+        GameObject p = Instantiate(playerPrefab, initialPlayerPosition, Quaternion.identity);
+        player = p.GetComponent<SwatMovement>();
+        player.mainCamera = mainCamera;
+        virtualCamera.Follow = GameObject.FindGameObjectWithTag("Jaw").GetComponent<Transform>();
     }
 
     void Start()
@@ -69,13 +83,13 @@ public class GameController : MonoBehaviour
                 string line;
                 int cols = System.Convert.ToInt32(reader.ReadLine());
                 int rows = System.Convert.ToInt32(reader.ReadLine());
-                m_Maze = new int[2 * cols - 1, 2 * rows - 1];
-                for (int i = 0; i < 2 * cols - 1; i++)
+                m_Maze = new int[2 * cols, 2 * rows];
+                for (int i = 0; i < 2 * cols; i++)
                 {
                     line = reader.ReadLine();
-                    for (int j = 0; j < 2 * rows - 1; j++)
+                    for (int j = 0; j < 2 * rows; j++)
                     {
-                        m_Maze[i, j] = line[j * 2] == '#' ? 1 : 0;
+                        m_Maze[i, j] = line[j] == '#' ? 1 : 0;
                     }
                 }
                 reader.Close();
@@ -155,6 +169,9 @@ public class GameController : MonoBehaviour
         }
 
         time = initialTime;
+        distanceMaxValue = new Vector2(edgeLength * (mazeRows - 1), edgeLength * (mazeColumns - 1));
+        distanceCurrentValue = new Vector2(0f, 0f);
+        // distanceMinValue = new Vector2(0f, 0f);
     }
 
     void CreateColliders(int i, int j)
@@ -184,6 +201,7 @@ public class GameController : MonoBehaviour
 
     public void SetExited()
     {
+        if (hasExited) return;
         hasExited = true;
 
         GetComponent<AudioSource>().Stop();
@@ -259,5 +277,11 @@ public class GameController : MonoBehaviour
         {
             timeText.text += "Press 'Left Shift' or 'Left Click' to dash.";
         }
+
+        distanceCurrentValue = new Vector2(
+            player.GetComponent<Transform>().position.x / distanceMaxValue.x,
+            player.GetComponent<Transform>().position.z / distanceMaxValue.y
+        );
+        progressSlider.SetValues(distanceCurrentValue);
     }
 }

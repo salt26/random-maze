@@ -927,7 +927,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnSpeed: 5
-  mainCamera: {fileID: 0}
   footsteps:
   - {fileID: 8300000, guid: 8f2c22de8d9de2c47a1a4574589d75d9, type: 3}
   - {fileID: 8300000, guid: 7b27a5f384f039844867b10d275f6117, type: 3}
@@ -935,6 +934,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 315aa6ef76c3bf243877a1a8235826a3, type: 3}
   - {fileID: 8300000, guid: 752ebb968a012624ca26d92c3a5dc9bd, type: 3}
   - {fileID: 8300000, guid: 1fd9bd1946753a74abe127eceb323f51, type: 3}
+  mainCamera: {fileID: 0}
 --- !u!1 &2556011006461600377
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,7 +2580,7 @@ GameObject:
   - component: {fileID: 701410627979763554}
   m_Layer: 0
   m_Name: swat:Jaw
-  m_TagString: Untagged
+  m_TagString: Jaw
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

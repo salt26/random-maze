@@ -6,8 +6,10 @@ public class SwatMovement : MonoBehaviour
 {
 
     public float turnSpeed = 5f;
-    public Camera mainCamera;
     public List<AudioClip> footsteps;
+
+    [HideInInspector]
+    public Camera mainCamera;
 
     int m_AnimationState;
     Animator m_Animator;
