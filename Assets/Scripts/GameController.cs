@@ -4,7 +4,6 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Runtime.InteropServices.ComTypes;
 using Cinemachine;
 
 public class GameController : MonoBehaviour
@@ -69,9 +68,17 @@ public class GameController : MonoBehaviour
     {
         Cursor.visible = false;
         MazeGenerator m_MazeGenerator = new MazeGenerator();
+        bool fileExist = false;
+
         // simple setting
         m_MazeGenerator.setRatio(.75f);
-        bool fileExist = false;
+
+        if (MainController.mc != null)
+        {
+            mazeColumns = MainController.mc.MazeColumns;
+            mazeRows = MainController.mc.MazeRows;
+            initialTime = MainController.mc.InitialTime;
+        }
 
         mazeColumns = Mathf.Clamp(mazeColumns, 5, 26);
         mazeRows = Mathf.Clamp(mazeRows, 5, 26);
@@ -215,6 +222,11 @@ public class GameController : MonoBehaviour
         GetComponent<AudioSource>().clip = exitClip;
         GetComponent<AudioSource>().loop = false;
         GetComponent<AudioSource>().Play();
+
+        if (!isMenuShowed)
+        {
+            MenuButton();
+        }
     }
     public void SetShiftPressed()
     {
@@ -227,21 +239,25 @@ public class GameController : MonoBehaviour
         {
             MenuButton();
         }
-        if (isMenuShowed && Input.GetKeyDown(KeyCode.F1))
+        if (isMenuShowed && Input.GetKeyDown(KeyCode.O))
         {
             SoundButton();
+            MenuButton();
         }
-        if (isMenuShowed && Input.GetKeyDown(KeyCode.F2))
+        if (isMenuShowed && Input.GetKeyDown(KeyCode.M))
         {
             MoveButton();
+            MenuButton();
         }
-        if (isMenuShowed && Input.GetKeyDown(KeyCode.F3))
+        if (isMenuShowed && Input.GetKeyDown(KeyCode.N))
         {
             NewButton();
+            MenuButton();
         }
-        if (isMenuShowed && Input.GetKeyDown(KeyCode.F4))
+        if (isMenuShowed && Input.GetKeyDown(KeyCode.Q))
         {
             QuitButton();
+            MenuButton();
         }
     }
 
@@ -270,11 +286,11 @@ public class GameController : MonoBehaviour
 
         if (sign <= 0)
         {
-            timeText.text = "<color=#ff0000>-";
+            timeText.text = "<color=#FF1100>-";
         }
         else
         {
-            if (hasExited) timeText.text = "<color=#0000ff>";
+            if (hasExited) timeText.text = "<color=#00FF57>";
             else timeText.text = "";
         }
 
@@ -330,16 +346,16 @@ public class GameController : MonoBehaviour
 
     public void SoundButton()
     {
-        if (isVolume0)
+        if (!isVolume0)
         {
-            isVolume0 = false;
+            isVolume0 = true;
             GetComponent<AudioSource>().volume = 0f;
             player.GetComponent<AudioSource>().volume = 0f;
             soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
         }
         else
         {
-            isVolume0 = true;
+            isVolume0 = false;
             GetComponent<AudioSource>().volume = 1f;
             player.GetComponent<AudioSource>().volume = 1f;
             soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
@@ -358,6 +374,7 @@ public class GameController : MonoBehaviour
 
     public void QuitButton()
     {
-        Application.Quit();
+        Cursor.visible = true;
+        SceneManager.LoadScene(0);
     }
 }

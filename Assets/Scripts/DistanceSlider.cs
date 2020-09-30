@@ -7,6 +7,7 @@ public class DistanceSlider : MonoBehaviour
 {
     public RectTransform fillRectX;
     public RectTransform fillRectY;
+    public RectTransform tickY;
 
     private float xValue;
     private float yValue;
@@ -27,8 +28,9 @@ public class DistanceSlider : MonoBehaviour
 
     void UpdateSlider()
     {
-        fillRectX.anchorMax = new Vector2(Mathf.Clamp(xValue, 0f, 1f) / 2f, 1f);
-        fillRectY.anchorMax = new Vector2(
-            (Mathf.Clamp(xValue, 0f, 1f) + Mathf.Clamp(yValue, 0f, 1f)) / 2f, 1f);
+        fillRectX.anchorMax = new Vector2(xValue / 2f, 1f);
+        fillRectY.anchorMax = new Vector2((xValue + yValue) / 2f, 1f);
+        tickY.anchorMin = new Vector2(0.49f + xValue / 2f, 0f);
+        tickY.anchorMax = new Vector2(0.51f + xValue / 2f, 1f);
     }
 }
