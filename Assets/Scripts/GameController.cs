@@ -17,8 +17,12 @@ public class GameController : MonoBehaviour
     public GameObject colliderCorner;
     public GameObject colliderEdge;
     public GameObject colliderExit;
+    public GameObject menu;
     public GameObject playerPrefab;
+    public Button menuButton;
     public Text timeText;
+    public Text menuButtonText;
+    public Text soundButtonText;
     public DistanceSlider progressSlider;
     public AudioClip exitClip;
     public AudioClip timeoutClip;
@@ -40,6 +44,8 @@ public class GameController : MonoBehaviour
     private bool hasExited = false;
     private bool hasPressedShift = false;
     private bool isTimeout = false;
+    private bool isMenuShowed = false;
+    private bool isVolume0 = false;
     private Vector2 distanceMaxValue;
     private Vector2 distanceCurrentValue;
 
@@ -52,6 +58,7 @@ public class GameController : MonoBehaviour
             Destroy(gc.gameObject);
         }
         gc = this;
+
         GameObject p = Instantiate(playerPrefab, initialPlayerPosition, Quaternion.identity);
         player = p.GetComponent<SwatMovement>();
         player.mainCamera = mainCamera;
@@ -216,13 +223,25 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            MenuButton();
         }
-        if (Input.GetKey(KeyCode.R))
+        if (isMenuShowed && Input.GetKeyDown(KeyCode.F1))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SoundButton();
+        }
+        if (isMenuShowed && Input.GetKeyDown(KeyCode.F2))
+        {
+            MoveButton();
+        }
+        if (isMenuShowed && Input.GetKeyDown(KeyCode.F3))
+        {
+            NewButton();
+        }
+        if (isMenuShowed && Input.GetKeyDown(KeyCode.F4))
+        {
+            QuitButton();
         }
     }
 
@@ -269,13 +288,17 @@ public class GameController : MonoBehaviour
         if (sign <= 0 || hasExited)
             timeText.text += "</color>";
 
-        if (hasExited || time <= 0f)
+        if (time <= 0f)
         {
-            timeText.text += "Press 'R' to restart, or 'Esc' to quit.";
+            timeText.text += "Time out!";
+        }
+        else if (hasExited)
+        {
+            timeText.text += "Congraturations!";
         }
         else if (!hasPressedShift)
         {
-            timeText.text += "Press 'Left Shift' or 'Left Click' to dash.";
+            timeText.text += "Press 'Left Shift' or 'Right Click' to dash.";
         }
 
         distanceCurrentValue = new Vector2(
@@ -283,5 +306,58 @@ public class GameController : MonoBehaviour
             player.GetComponent<Transform>().position.z / distanceMaxValue.y
         );
         progressSlider.SetValues(distanceCurrentValue);
+    }
+
+    public void MenuButton()
+    {
+        if (isMenuShowed)
+        {
+            isMenuShowed = false;
+            menu.SetActive(false);
+            //menuButton.interactable = false;
+            menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.11f, 0.98f);
+            menuButtonText.text = "<color=#E6C700>◆</color> Menu";
+        }
+        else
+        {
+            isMenuShowed = true;
+            menu.SetActive(true);
+            //menuButton.interactable = true;
+            menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.15f, 0.98f);
+            menuButtonText.text = "<color=#E6C700>◆</color> Hide Menu";
+        }
+    }
+
+    public void SoundButton()
+    {
+        if (isVolume0)
+        {
+            isVolume0 = false;
+            GetComponent<AudioSource>().volume = 0f;
+            player.GetComponent<AudioSource>().volume = 0f;
+            soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
+        }
+        else
+        {
+            isVolume0 = true;
+            GetComponent<AudioSource>().volume = 1f;
+            player.GetComponent<AudioSource>().volume = 1f;
+            soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
+        }
+    }
+
+    public void MoveButton()
+    {
+        player.GetComponent<Transform>().position = initialPlayerPosition;
+    }
+
+    public void NewButton()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void QuitButton()
+    {
+        Application.Quit();
     }
 }

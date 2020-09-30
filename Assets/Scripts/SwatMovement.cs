@@ -34,7 +34,7 @@ public class SwatMovement : MonoBehaviour
         int horizontalState = !hasHorizontalInput ? 1 : (horizontal > 0 ? 2 : 0);
         int verticalState = !hasVerticalInput ? 1 : (vertical > 0 ? 2 : 0);
         m_AnimationState = verticalState * 3 + horizontalState;
-        bool isSprinting = (Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(0)) && m_AnimationState == 7;
+        bool isSprinting = (Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1)) && m_AnimationState == 7;
 
         if (isMoving && isSprinting) GameController.gc.SetShiftPressed();
 
@@ -81,13 +81,6 @@ public class SwatMovement : MonoBehaviour
             m_Rigidbody.MoveRotation(Quaternion.LookRotation(m_Movement));
         }
     }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        //Debug.Log("Hello");
-    }
-
-
 
     void OnAnimatorIK(int layerIndex)
     {
