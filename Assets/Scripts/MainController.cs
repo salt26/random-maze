@@ -44,7 +44,8 @@ public class MainController : MonoBehaviour
         hasGameStart = true;
         MazeColumns = 12;
         MazeRows = 12;
-        InitialTime = 245;
+        //InitialTime = 245;
+        InitialTime = 305;
         SceneManager.LoadScene(1);
     }
 
@@ -54,7 +55,8 @@ public class MainController : MonoBehaviour
         hasGameStart = true;
         MazeColumns = 18;
         MazeRows = 18;
-        InitialTime = 275;
+        //InitialTime = 275;
+        InitialTime = 365;
         SceneManager.LoadScene(1);
     }
 
@@ -64,7 +66,8 @@ public class MainController : MonoBehaviour
         hasGameStart = true;
         MazeColumns = 24;
         MazeRows = 24;
-        InitialTime = 305;
+        //InitialTime = 305;
+        InitialTime = 425;
         SceneManager.LoadScene(1);
     }
 

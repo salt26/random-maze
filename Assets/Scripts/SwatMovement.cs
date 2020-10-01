@@ -19,7 +19,7 @@ public class SwatMovement : MonoBehaviour
     float footstepTiming = 0f;
 
     //Transform lookAt;
-    Transform follow;
+    //Transform follow;
     float vertical = 0f;
 
     void Start()
@@ -27,7 +27,7 @@ public class SwatMovement : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
 
-        follow = GameController.gc.virtualCamera.Follow;
+        //follow = GameController.gc.virtualCamera.Follow;
 
         /*
         GameObject g = new GameObject("LookAt");
@@ -92,7 +92,7 @@ public class SwatMovement : MonoBehaviour
         //m_Movement.Normalize();
 
         GameController.gc.virtualCamera.GetComponent<Transform>().Rotate(
-            new Vector3(0f, 1f, 0f) * 4f
+            new Vector3(0f, 1f, 0f) * 2.5f
             * Mathf.Pow(MobileJoystick.instance.moveDirection.x, 2) * Mathf.Sign(MobileJoystick.instance.moveDirection.x));
 
         float angle = Mathf.Deg2Rad * mainCamera.transform.eulerAngles.y;

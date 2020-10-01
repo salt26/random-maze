@@ -13,17 +13,17 @@ public class MobileJoystick : MonoBehaviour
     public Vector2 moveDirection;
 
     // Joystick components size
-    int circleSize = 120;
-    int buttonSize = 100;
+    int circleSize = (int)(Screen.height * 0.2f * 1.2f);
+    int buttonSize = (int)(Screen.height * 0.2f);
 
     // How far the joystick should be placed from the side of the screen
-    int marginLeft = 100;
+    int marginLeft = (int)(Screen.height * 0.22f);
 
     // How far the joystick should be placed from the bottom of the screen
-    int marginBottom = 100;
+    int marginBottom = (int)(Screen.height * 0.22f);
 
-    const float MIN_THRESHOLD = 20f;
-    const float MAX_THRESHOLD = 100f;
+    float MIN_THRESHOLD = Screen.height * 0.2f * 0.2f;
+    float MAX_THRESHOLD = Screen.height * 0.2f;
 
     Canvas mainCanvas;
 
