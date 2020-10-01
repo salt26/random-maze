@@ -25,8 +25,12 @@ public class SwatMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        /*
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+        */
+        float horizontal = 0f;
+        float vertical = MobileJoystick.instance.moveDirection.y;
         bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
         bool isMoving = hasHorizontalInput || hasVerticalInput;

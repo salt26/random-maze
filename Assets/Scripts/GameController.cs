@@ -331,7 +331,7 @@ public class GameController : MonoBehaviour
             isMenuShowed = false;
             menu.SetActive(false);
             //menuButton.interactable = false;
-            menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.11f, 0.98f);
+            //menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.11f, 0.98f);
             menuButtonText.text = "<color=#E6C700>◆</color> Menu";
         }
         else
@@ -339,7 +339,7 @@ public class GameController : MonoBehaviour
             isMenuShowed = true;
             menu.SetActive(true);
             //menuButton.interactable = true;
-            menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.15f, 0.98f);
+            //menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.15f, 0.98f);
             menuButtonText.text = "<color=#E6C700>◆</color> Hide Menu";
         }
     }
