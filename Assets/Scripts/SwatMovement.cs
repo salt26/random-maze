@@ -92,7 +92,7 @@ public class SwatMovement : MonoBehaviour
         //m_Movement.Normalize();
 
         GameController.gc.virtualCamera.GetComponent<Transform>().Rotate(
-            new Vector3(0f, 1f, 0f) * 2.5f
+            new Vector3(0f, 1f, 0f) * 2.2f
             * Mathf.Pow(MobileJoystick.instance.moveDirection.x, 2) * Mathf.Sign(MobileJoystick.instance.moveDirection.x));
 
         float angle = Mathf.Deg2Rad * mainCamera.transform.eulerAngles.y;

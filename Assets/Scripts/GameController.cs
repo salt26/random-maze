@@ -44,7 +44,6 @@ public class GameController : MonoBehaviour
     //private bool hasPressedShift = false;
     private bool isTimeout = false;
     private bool isMenuShowed = false;
-    private bool isVolume0 = false;
     private Vector2 distanceMaxValue;
     private Vector2 distanceCurrentValue;
 
@@ -186,6 +185,24 @@ public class GameController : MonoBehaviour
         distanceMaxValue = new Vector2(edgeLength * (mazeRows - 1), edgeLength * (mazeColumns - 1));
         distanceCurrentValue = new Vector2(0f, 0f);
         // distanceMinValue = new Vector2(0f, 0f);
+
+        if (MainController.mc != null)
+        {
+            if (MainController.mc.isSoundOff)
+            {
+                GetComponent<AudioSource>().volume = 0f;
+                player.GetComponent<AudioSource>().volume = 0f;
+                //soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
+                soundButtonText.text = "Sound (Off) <color=#E69900>◆</color>";
+            }
+            else
+            {
+                GetComponent<AudioSource>().volume = 1f;
+                player.GetComponent<AudioSource>().volume = 1f;
+                //soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
+                soundButtonText.text = "Sound (On) <color=#E69900>◆</color>";
+            }
+        }
     }
 
     void CreateColliders(int i, int j)
@@ -369,9 +386,9 @@ public class GameController : MonoBehaviour
 
     public void SoundButton()
     {
-        if (!isVolume0)
+        if (!MainController.mc.isSoundOff)
         {
-            isVolume0 = true;
+            MainController.mc.isSoundOff = true;
             GetComponent<AudioSource>().volume = 0f;
             player.GetComponent<AudioSource>().volume = 0f;
             //soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
@@ -379,7 +396,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            isVolume0 = false;
+            MainController.mc.isSoundOff = false;
             GetComponent<AudioSource>().volume = 1f;
             player.GetComponent<AudioSource>().volume = 1f;
             //soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
