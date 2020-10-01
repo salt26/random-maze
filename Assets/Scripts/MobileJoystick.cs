@@ -22,6 +22,9 @@ public class MobileJoystick : MonoBehaviour
     // How far the joystick should be placed from the bottom of the screen
     int marginBottom = 100;
 
+    const float MIN_THRESHOLD = 20f;
+    const float MAX_THRESHOLD = 100f;
+
     Canvas mainCanvas;
 
     // Mobile movement
@@ -148,27 +151,36 @@ public class MobileJoystick : MonoBehaviour
         // Moving
         if (moveTouch.isActive)
         {
-            moveTouch.mainButton.rectTransform.position = new Vector3(moveTouch.currentTouchPos.x - moveTouch.touchOffset.x, moveTouch.currentTouchPos.y - moveTouch.touchOffset.y);
-            moveDirection.x = moveTouch.mainButton.rectTransform.position.x - moveTouch.defaultArea.x;
-            moveDirection.y = moveTouch.mainButton.rectTransform.position.y - moveTouch.defaultArea.y;
+            moveDirection.x = moveTouch.currentTouchPos.x - moveTouch.touchOffset.x - moveTouch.defaultArea.x;
+            moveDirection.y = moveTouch.currentTouchPos.y - moveTouch.touchOffset.y - moveTouch.defaultArea.y;
 
-            if (Mathf.Abs(moveDirection.x) < 19)
+            if (Mathf.Abs(moveDirection.x) < MIN_THRESHOLD)
             {
                 moveDirection.x = 0;
             }
             else
             {
-                moveDirection.x = Mathf.Clamp(moveDirection.x / 75.000f, -1.000f, 1.000f);
+                moveDirection.x = Mathf.Clamp(moveDirection.x / MAX_THRESHOLD, -1.000f, 1.000f);
             }
 
-            if (Mathf.Abs(moveDirection.y) < 19)
+            if (Mathf.Abs(moveDirection.y) < MIN_THRESHOLD)
             {
                 moveDirection.y = 0;
             }
             else
             {
-                moveDirection.y = Mathf.Clamp(moveDirection.y / 75.000f, -1.000f, 1.000f);
+                moveDirection.y = Mathf.Clamp(moveDirection.y / MAX_THRESHOLD, -1.000f, 1.000f);
             }
+
+            if (Vector2.SqrMagnitude(moveDirection) >= 1f)
+            {
+                moveDirection.Normalize();
+            }
+
+            moveTouch.mainButton.rectTransform.position = new Vector3(
+                moveDirection.x * MAX_THRESHOLD + moveTouch.defaultArea.x,
+                moveDirection.y * MAX_THRESHOLD + moveTouch.defaultArea.y
+            );
         }
         else
         {
@@ -199,5 +211,10 @@ public class MobileJoystick : MonoBehaviour
             moveTouch.touchOffset = Vector2.zero;
             moveTouch.touchID = -1;
         }
+    }
+
+    public void SetCircleColor(Color color)
+    {
+        moveTouch.backgroundCircle.color = new Color(color.r, color.g, color.b, 0.5f);
     }
 }

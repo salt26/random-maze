@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour
     private float time;
     private int[,] m_Maze;
     private bool hasExited = false;
-    private bool hasPressedShift = false;
+    //private bool hasPressedShift = false;
     private bool isTimeout = false;
     private bool isMenuShowed = false;
     private bool isVolume0 = false;
@@ -66,7 +66,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        Cursor.visible = false;
+        //Cursor.visible = false;
         MazeGenerator m_MazeGenerator = new MazeGenerator();
         bool fileExist = false;
 
@@ -228,10 +228,12 @@ public class GameController : MonoBehaviour
             MenuButton();
         }
     }
+    /*
     public void SetShiftPressed()
     {
         hasPressedShift = true;
     }
+    */
 
     void Update()
     {
@@ -239,6 +241,7 @@ public class GameController : MonoBehaviour
         {
             MenuButton();
         }
+        /*
         if (isMenuShowed && Input.GetKeyDown(KeyCode.O))
         {
             SoundButton();
@@ -259,6 +262,7 @@ public class GameController : MonoBehaviour
             QuitButton();
             MenuButton();
         }
+        */
     }
 
     void FixedUpdate()
@@ -312,9 +316,26 @@ public class GameController : MonoBehaviour
         {
             timeText.text += "Congraturations!";
         }
+        /*
         else if (!hasPressedShift)
         {
             timeText.text += "Press 'Left Shift' or 'Right Click' to dash.";
+        }
+        */
+        else
+        {
+            if (mazeColumns == 12 && mazeRows == 12)
+            {
+                timeText.text += "Level: Easy";
+            }
+            else if (mazeColumns == 18 && mazeRows == 18)
+            {
+                timeText.text += "Level: Normal";
+            }
+            else if (mazeColumns == 24 && mazeRows == 24)
+            {
+                timeText.text += "Level: Hard";
+            }
         }
 
         distanceCurrentValue = new Vector2(
@@ -332,7 +353,8 @@ public class GameController : MonoBehaviour
             menu.SetActive(false);
             //menuButton.interactable = false;
             //menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.11f, 0.98f);
-            menuButtonText.text = "<color=#E6C700>◆</color> Menu";
+            //menuButtonText.text = "<color=#E6C700>◆</color> Menu";
+            menuButtonText.text = "Menu <color=#E6C700>◆</color>";
         }
         else
         {
@@ -340,7 +362,8 @@ public class GameController : MonoBehaviour
             menu.SetActive(true);
             //menuButton.interactable = true;
             //menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.15f, 0.98f);
-            menuButtonText.text = "<color=#E6C700>◆</color> Hide Menu";
+            //menuButtonText.text = "<color=#E6C700>◆</color> Hide Menu";
+            menuButtonText.text = "Hide Menu <color=#E6C700>◆</color>";
         }
     }
 
@@ -351,14 +374,16 @@ public class GameController : MonoBehaviour
             isVolume0 = true;
             GetComponent<AudioSource>().volume = 0f;
             player.GetComponent<AudioSource>().volume = 0f;
-            soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
+            //soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
+            soundButtonText.text = "Sound (Off) <color=#E69900>◆</color>";
         }
         else
         {
             isVolume0 = false;
             GetComponent<AudioSource>().volume = 1f;
             player.GetComponent<AudioSource>().volume = 1f;
-            soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
+            //soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
+            soundButtonText.text = "Sound (On) <color=#E69900>◆</color>";
         }
     }
 
