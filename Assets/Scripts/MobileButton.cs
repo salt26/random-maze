@@ -11,8 +11,8 @@ public class MobileButton : MonoBehaviour
 
     public bool HasPressed {
         get {
-            if (touch != null)
-                return touch.isActive;
+            if (buttonTouch != null)
+                return buttonTouch.isActive;
             else
                 return false;
         }
@@ -44,7 +44,7 @@ public class MobileButton : MonoBehaviour
         public bool isActive = false;
     }
 
-    ButtonInfo touch = new ButtonInfo();
+    ButtonInfo buttonTouch = new ButtonInfo();
 
     public static MobileButton instance;
 
@@ -79,35 +79,35 @@ public class MobileButton : MonoBehaviour
         GameObject cntrlTmpObj = new GameObject("Dash Circle");
         cntrlTmpObj.transform.position = Vector3.zero;
         cntrlTmpObj.transform.parent = tmpObj.transform;
-        touch.backgroundCircle = cntrlTmpObj.AddComponent<Image>();
-        touch.backgroundCircle.sprite = circleSprite;
-        touch.backgroundCircle.rectTransform.anchorMin = new Vector2(0, 0);
-        touch.backgroundCircle.rectTransform.anchorMax = new Vector2(0, 0);
-        touch.backgroundCircle.rectTransform.sizeDelta = new Vector2(circleSize, circleSize);
-        touch.backgroundCircle.rectTransform.pivot = new Vector2(1, 0);
-        touch.backgroundCircle.rectTransform.position = new Vector3(Screen.width - marginRight, marginBottom, 0);
-        touch.backgroundCircle.color = new Color(1f, 1f, 1f, 0.5f);
+        buttonTouch.backgroundCircle = cntrlTmpObj.AddComponent<Image>();
+        buttonTouch.backgroundCircle.sprite = circleSprite;
+        buttonTouch.backgroundCircle.rectTransform.anchorMin = new Vector2(0, 0);
+        buttonTouch.backgroundCircle.rectTransform.anchorMax = new Vector2(0, 0);
+        buttonTouch.backgroundCircle.rectTransform.sizeDelta = new Vector2(circleSize, circleSize);
+        buttonTouch.backgroundCircle.rectTransform.pivot = new Vector2(1, 0);
+        buttonTouch.backgroundCircle.rectTransform.position = new Vector3(Screen.width - marginRight, marginBottom, 0);
+        buttonTouch.backgroundCircle.color = new Color(1f, 1f, 1f, 0.5f);
 
         // Navigation button
         cntrlTmpObj = new GameObject("Movement Button");
         cntrlTmpObj.transform.position = Vector3.zero;
         cntrlTmpObj.transform.parent = tmpObj.transform;
-        touch.mainButton = cntrlTmpObj.AddComponent<Image>();
-        touch.mainButton.sprite = buttonSprite;
-        touch.mainButton.rectTransform.anchorMin = new Vector2(0, 0);
-        touch.mainButton.rectTransform.anchorMax = new Vector2(0, 0);
-        touch.mainButton.rectTransform.sizeDelta = new Vector2(buttonSize, buttonSize);
-        touch.mainButton.rectTransform.pivot = new Vector2(1, 0);
-        touch.mainButton.rectTransform.position = new Vector3(Screen.width - marginRight - (circleSize - buttonSize) / 2, marginBottom + (circleSize - buttonSize) / 2, 0);
-        touch.mainButton.color = new Color(1f, 1f, 1f, 0.8f);
+        buttonTouch.mainButton = cntrlTmpObj.AddComponent<Image>();
+        buttonTouch.mainButton.sprite = buttonSprite;
+        buttonTouch.mainButton.rectTransform.anchorMin = new Vector2(0, 0);
+        buttonTouch.mainButton.rectTransform.anchorMax = new Vector2(0, 0);
+        buttonTouch.mainButton.rectTransform.sizeDelta = new Vector2(buttonSize, buttonSize);
+        buttonTouch.mainButton.rectTransform.pivot = new Vector2(1, 0);
+        buttonTouch.mainButton.rectTransform.position = new Vector3(Screen.width - marginRight - (circleSize - buttonSize) / 2, marginBottom + (circleSize - buttonSize) / 2, 0);
+        buttonTouch.mainButton.color = new Color(1f, 1f, 1f, 0.8f);
 
         // Save the default location of the joystick button to be used later for input detection
-        touch.defaultArea = new Rect(touch.mainButton.rectTransform.position.x,
-            touch.mainButton.rectTransform.position.y,
-            touch.mainButton.rectTransform.sizeDelta.x,
-            touch.mainButton.rectTransform.sizeDelta.y);
+        buttonTouch.defaultArea = new Rect(buttonTouch.mainButton.rectTransform.position.x,
+            buttonTouch.mainButton.rectTransform.position.y,
+            buttonTouch.mainButton.rectTransform.sizeDelta.x,
+            buttonTouch.mainButton.rectTransform.sizeDelta.y);
 
-        touch.detectionArea = new Rect(Screen.width * 0.5f,
+        buttonTouch.detectionArea = new Rect(Screen.width * 0.5f,
             0f,
             Screen.width * 0.5f,
             Screen.height * 0.5f);
@@ -130,9 +130,9 @@ public class MobileButton : MonoBehaviour
 
             if (touch.phase == TouchPhase.Moved)
             {
-                if(touch.isActive && touch.touchID == touch.fingerId)
+                if(buttonTouch.isActive && buttonTouch.touchID == touch.fingerId)
                 {
-                    touch.currentTouchPos = touch.position;
+                    buttonTouch.currentTouchPos = touch.position;
                 }
             }
 
@@ -153,27 +153,27 @@ public class MobileButton : MonoBehaviour
             MobileButtonStop(-1);
         }
 
-        touch.currentTouchPos = Input.mousePosition;
+        buttonTouch.currentTouchPos = Input.mousePosition;
 #endif
 
         // Moving
-        if (touch.isActive)
+        if (buttonTouch.isActive)
         {
-            touch.mainButton.rectTransform.position = new Vector3(
-                Mathf.Clamp(touch.currentTouchPos.x + buttonSize / 2,
-                    touch.detectionArea.x + buttonSize / 2, touch.detectionArea.x + touch.detectionArea.width),
-                Mathf.Clamp(touch.currentTouchPos.y - buttonSize / 2,
-                    touch.detectionArea.y, touch.detectionArea.y + touch.detectionArea.height - buttonSize / 2),
+            buttonTouch.mainButton.rectTransform.position = new Vector3(
+                Mathf.Clamp(buttonTouch.currentTouchPos.x + buttonSize / 2,
+                    buttonTouch.detectionArea.x + buttonSize / 2, buttonTouch.detectionArea.x + buttonTouch.detectionArea.width),
+                Mathf.Clamp(buttonTouch.currentTouchPos.y - buttonSize / 2,
+                    buttonTouch.detectionArea.y, buttonTouch.detectionArea.y + buttonTouch.detectionArea.height - buttonSize / 2),
                 0
             );
-            touch.backgroundCircle.rectTransform.position = new Vector3(
-                touch.mainButton.rectTransform.position.x + (circleSize - buttonSize) / 2,
-                touch.mainButton.rectTransform.position.y - (circleSize - buttonSize) / 2, 0);
+            buttonTouch.backgroundCircle.rectTransform.position = new Vector3(
+                buttonTouch.mainButton.rectTransform.position.x + (circleSize - buttonSize) / 2,
+                buttonTouch.mainButton.rectTransform.position.y - (circleSize - buttonSize) / 2, 0);
         }
         else
         {
-            touch.mainButton.rectTransform.position = new Vector3(touch.defaultArea.x, touch.defaultArea.y);
-            touch.backgroundCircle.rectTransform.position = new Vector3(Screen.width - marginRight, marginBottom, 0);
+            buttonTouch.mainButton.rectTransform.position = new Vector3(buttonTouch.defaultArea.x, buttonTouch.defaultArea.y);
+            buttonTouch.backgroundCircle.rectTransform.position = new Vector3(Screen.width - marginRight, marginBottom, 0);
         }
     }
 
@@ -181,29 +181,29 @@ public class MobileButton : MonoBehaviour
     void MobileButtonsCheck(Vector2 touchPos, int touchID)
     {
         // Move controller
-        if (touch.detectionArea.Contains(new Vector2(touchPos.x, Screen.height - touchPos.y)) && !touch.isActive)
+        if (buttonTouch.detectionArea.Contains(new Vector2(touchPos.x, Screen.height - touchPos.y)) && !buttonTouch.isActive)
         {
-            touch.isActive = true;
+            buttonTouch.isActive = true;
             //touch.touchOffset = new Vector2(touchPos.x - touch.defaultArea.x, Screen.height - touchPos.y - touch.defaultArea.y);
-            touch.touchOffset = new Vector2(touchPos.x, Screen.height - touchPos.y);
-            touch.currentTouchPos = new Vector2(touchPos.x, Screen.height - touchPos.y);
-            touch.touchID = touchID;
+            buttonTouch.touchOffset = new Vector2(touchPos.x, Screen.height - touchPos.y);
+            buttonTouch.currentTouchPos = new Vector2(touchPos.x, Screen.height - touchPos.y);
+            buttonTouch.touchID = touchID;
         }
     }
 
     // Here we release the previously active button if we release the mouse button/finger from the screen
     void MobileButtonStop(int touchID)
     {
-        if (touch.isActive && touch.touchID == touchID)
+        if (buttonTouch.isActive && buttonTouch.touchID == touchID)
         {
-            touch.isActive = false;
-            touch.touchOffset = Vector2.zero;
-            touch.touchID = -1;
+            buttonTouch.isActive = false;
+            buttonTouch.touchOffset = Vector2.zero;
+            buttonTouch.touchID = -1;
         }
     }
 
     public void SetCircleColor(Color color)
     {
-        touch.backgroundCircle.color = new Color(color.r, color.g, color.b, 0.5f);
+        buttonTouch.backgroundCircle.color = new Color(color.r, color.g, color.b, 0.5f);
     }
 }
