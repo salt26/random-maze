@@ -10,6 +10,7 @@ public class MobileJoystick : MonoBehaviour
     public Sprite navigationButton;
 
     // Use this in your movement script for the input control
+    [HideInInspector]
     public Vector2 moveDirection;
 
     // Joystick components size
@@ -34,6 +35,7 @@ public class MobileJoystick : MonoBehaviour
         public Image backgroundCircle;
         public Image mainButton;
         public Rect defaultArea;
+        public Rect detectionArea;
         public Vector2 touchOffset;
         public Vector2 currentTouchPos;
         public int touchID;
@@ -103,6 +105,11 @@ public class MobileJoystick : MonoBehaviour
             moveTouch.mainButton.rectTransform.position.y,
             moveTouch.mainButton.rectTransform.sizeDelta.x,
             moveTouch.mainButton.rectTransform.sizeDelta.y);
+
+        moveTouch.detectionArea = new Rect(0f,
+            0f,
+            Screen.width * 0.5f,
+            Screen.height * 0.8f);
     }
 
     // Update is called once per frame
@@ -151,8 +158,8 @@ public class MobileJoystick : MonoBehaviour
         // Moving
         if (moveTouch.isActive)
         {
-            moveDirection.x = moveTouch.currentTouchPos.x - moveTouch.touchOffset.x - moveTouch.defaultArea.x;
-            moveDirection.y = moveTouch.currentTouchPos.y - moveTouch.touchOffset.y - moveTouch.defaultArea.y;
+            moveDirection.x = moveTouch.currentTouchPos.x - moveTouch.touchOffset.x;
+            moveDirection.y = moveTouch.currentTouchPos.y - moveTouch.touchOffset.y;
 
             if (Mathf.Abs(moveDirection.x) < MIN_THRESHOLD)
             {
@@ -178,25 +185,30 @@ public class MobileJoystick : MonoBehaviour
             }
 
             moveTouch.mainButton.rectTransform.position = new Vector3(
-                moveDirection.x * MAX_THRESHOLD + moveTouch.defaultArea.x,
-                moveDirection.y * MAX_THRESHOLD + moveTouch.defaultArea.y
+                moveTouch.touchOffset.x + moveDirection.x * MAX_THRESHOLD - (buttonSize / 2),
+                moveTouch.touchOffset.y + moveDirection.y * MAX_THRESHOLD - (buttonSize / 2)
             );
+            moveTouch.backgroundCircle.rectTransform.position = new Vector3(
+                moveTouch.touchOffset.x - (circleSize / 2), 
+                moveTouch.touchOffset.y - (circleSize / 2), 0);
         }
         else
         {
             moveTouch.mainButton.rectTransform.position = new Vector3(moveTouch.defaultArea.x, moveTouch.defaultArea.y);
+            moveTouch.backgroundCircle.rectTransform.position = new Vector3(marginLeft, marginBottom, 0);
             moveDirection = Vector2.zero;
         }
     }
 
-    // Here we check if the clicked/tapped position is inside the joystick button
+    // Here we check if the clicked/tapped position is inside the joystick detection area
     void MobileButtonsCheck(Vector2 touchPos, int touchID)
     {
         // Move controller
-        if (moveTouch.defaultArea.Contains(new Vector2(touchPos.x, Screen.height - touchPos.y)) && !moveTouch.isActive)
+        if (moveTouch.detectionArea.Contains(new Vector2(touchPos.x, Screen.height - touchPos.y)) && !moveTouch.isActive)
         {
             moveTouch.isActive = true;
-            moveTouch.touchOffset = new Vector2(touchPos.x - moveTouch.defaultArea.x, Screen.height - touchPos.y - moveTouch.defaultArea.y);
+            //moveTouch.touchOffset = new Vector2(touchPos.x - moveTouch.defaultArea.x, Screen.height - touchPos.y - moveTouch.defaultArea.y);
+            moveTouch.touchOffset = new Vector2(touchPos.x, Screen.height - touchPos.y);
             moveTouch.currentTouchPos = new Vector2(touchPos.x, Screen.height - touchPos.y);
             moveTouch.touchID = touchID;
         }

@@ -26,38 +26,11 @@ public class SwatMovement : MonoBehaviour
     {
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
-
-        //follow = GameController.gc.virtualCamera.Follow;
-
-        /*
-        GameObject g = new GameObject("LookAt");
-        lookAt = g.transform;
-        lookAt.SetParent(this.transform);
-        lookAt.position = follow.position + new Vector3(0f, 0f, 2f);
-        GameController.gc.virtualCamera.LookAt = lookAt;
-        */
     }
 
     private void Update()
     {
         vertical = MobileJoystick.instance.moveDirection.y;
-
-        /*
-        if (!Mathf.Approximately(MobileJoystick.instance.moveDirection.x, 0f))
-        {
-            lookAt.position = new Vector3(follow.position.x, lookAt.localPosition.y, follow.position.z);
-            lookAt.localPosition += new Vector3(
-                MobileJoystick.instance.moveDirection.x * 0.5f,
-                0f,
-                2f);
-                //Mathf.Sqrt(Mathf.Max(1f - Mathf.Pow(MobileJoystick.instance.moveDirection.x, 2), 0f)) + 1f);
-        }
-        else
-        {
-            lookAt.position = new Vector3(follow.position.x, lookAt.localPosition.y, follow.position.z);
-            lookAt.localPosition += new Vector3(0f, 0f, 2f);
-        }
-        */
     }
 
     void FixedUpdate()
@@ -66,6 +39,7 @@ public class SwatMovement : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         */
+        //vertical = Input.GetAxis("Vertical");
         float horizontal = 0f;
 
         bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
@@ -76,15 +50,18 @@ public class SwatMovement : MonoBehaviour
         int verticalState = !hasVerticalInput ? 1 : (vertical > 0 ? 2 : 0);
         m_AnimationState = verticalState * 3 + horizontalState;
         // bool isSprinting = (Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1)) && m_AnimationState == 7;
-        bool isSprinting = Vector2.SqrMagnitude(MobileJoystick.instance.moveDirection) >= 0.99f && 
-            MobileJoystick.instance.moveDirection.y > 0f && m_AnimationState == 7;
+        bool isSprinting = MobileButton.instance.HasPressed && 
+            vertical > 0f && m_AnimationState == 7;
 
-        if (isSprinting)
-            MobileJoystick.instance.SetCircleColor(new Color(1f, 0.06666667f, 0f));
-        else if (isMoving)
+        if (isMoving)
             MobileJoystick.instance.SetCircleColor(new Color(1f, 0.8666667f, 0f));
         else
             MobileJoystick.instance.SetCircleColor(new Color(1f, 1f, 1f));
+
+        if (isSprinting)
+            MobileButton.instance.SetCircleColor(new Color(1f, 0.06666667f, 0f));
+        else
+            MobileButton.instance.SetCircleColor(new Color(1f, 1f, 1f));
 
         //if (isMoving && isSprinting) GameController.gc.SetShiftPressed();
 
