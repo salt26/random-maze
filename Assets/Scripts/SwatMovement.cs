@@ -7,7 +7,6 @@ public class SwatMovement : MonoBehaviour
 {
 
     public float turnSpeed = 5f;
-    public List<AudioClip> footsteps;
 
     [HideInInspector]
     public Camera mainCamera;
@@ -89,10 +88,10 @@ public class SwatMovement : MonoBehaviour
         if (footstepTiming > 1f)
         {
             footstepTiming = 0f;
-            int index = UnityEngine.Random.Range(0, footsteps.Count - 1);
-            GetComponent<AudioSource>().PlayOneShot(footsteps[index]);
-            footsteps.Add(footsteps[index]);
-            footsteps.RemoveAt(index);
+            int index = UnityEngine.Random.Range(0, GameController.gc.footsteps.Count - 1);
+            GetComponent<AudioSource>().PlayOneShot(GameController.gc.footsteps[index]);
+            GameController.gc.footsteps.Add(GameController.gc.footsteps[index]);
+            GameController.gc.footsteps.RemoveAt(index);
         }
 
         m_Animator.SetInteger("AnimationState", m_AnimationState);

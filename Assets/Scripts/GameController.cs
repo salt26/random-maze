@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     public static GameController gc;
 
     public float edgeLength;
+    public bool useColorMatching;
     public GameObject[] corners;
     public GameObject[] edges;
     public GameObject colliderCorner;
@@ -18,6 +19,7 @@ public class GameController : MonoBehaviour
     public GameObject colliderExit;
     public GameObject menu;
     public GameObject playerPrefab;
+    public List<AudioClip> footsteps;
     public Button menuButton;
     public Text timeText;
     public Text menuButtonText;
@@ -124,32 +126,85 @@ public class GameController : MonoBehaviour
             //Debug.Log(m_MazeGenerator.ConvertToString(m_Maze));
         }
 
-
-        for (int i = 0; i < m_Maze.GetLength(0); i++)
+        if (useColorMatching)
         {
-            for (int j = 0; j < m_Maze.GetLength(1); j++)
+            int[,] mazeColor = new int[m_Maze.GetLength(0), m_Maze.GetLength(1)];
+            for (int i = 0; i < m_Maze.GetLength(0); i += 2)
             {
-                if (m_Maze[i, j] == 0) continue;
-                int type = i % 2 * 2 + j % 2;
-                switch (type)
+                for (int j = 0; j < m_Maze.GetLength(1); j += 2)
                 {
-                    case 0:
-                        Instantiate(corners[Random.Range(0, corners.Length)], 
-                            new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
-                            Quaternion.Euler(0, 90f * Random.Range(0, 4), 0));
-                        break;
-                    case 1:
-                        Instantiate(edges[Random.Range(0, edges.Length)],
-                            new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position, 
-                            Quaternion.Euler(0, 90f + 180f * Random.Range(0, 2), 0));
-                        break;
-                    case 2:
-                        Instantiate(edges[Random.Range(0, edges.Length)],
-                            new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position, 
-                            Quaternion.Euler(0, 180f * Random.Range(0, 2), 0));
-                        break;
-                    default:
-                        break;
+                    if (m_Maze[i, j] == 0)
+                    {
+                        mazeColor[i, j] = -1;
+                        continue;
+                    }
+                    // i % 2 * 2 + j % 2 == 0
+                    int r = Random.Range(0, corners.Length);
+                    Instantiate(corners[r],
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
+                                Quaternion.Euler(0, 90f * Random.Range(0, 4), 0));
+                    mazeColor[i, j] = r;
+                }
+            }
+
+            for (int i = 0; i < m_Maze.GetLength(0); i += 2)
+            {
+                for (int j = 1; j < m_Maze.GetLength(1); j += 2)
+                {
+                    if (m_Maze[i, j] == 0) continue;
+                    // i % 2 * 2 + j % 2 == 1
+                    int r = Random.Range(0, edges.Length);
+                    if (j + 1 < m_Maze.GetLength(1) && mazeColor[i, j - 1] == mazeColor[i, j + 1])
+                        r = mazeColor[i, j - 1];
+                    Instantiate(edges[r],
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
+                                Quaternion.Euler(0, 90f + 180f * Random.Range(0, 2), 0));
+                }
+            }
+
+            for (int i = 1; i < m_Maze.GetLength(0); i += 2)
+            {
+                for (int j = 0; j < m_Maze.GetLength(1); j += 2)
+                {
+                    if (m_Maze[i, j] == 0) continue;
+                    // i % 2 * 2 + j % 2 == 2
+                    int r = Random.Range(0, edges.Length);
+                    if (i + 1 < m_Maze.GetLength(0) && mazeColor[i - 1, j] == mazeColor[i + 1, j])
+                        r = mazeColor[i - 1, j];
+                    Instantiate(edges[r],
+                        new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
+                        Quaternion.Euler(0, 180f * Random.Range(0, 2), 0));
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < m_Maze.GetLength(0); i++)
+            {
+                for (int j = 0; j < m_Maze.GetLength(1); j++)
+                {
+                    if (m_Maze[i, j] == 0) continue;
+                    int type = i % 2 * 2 + j % 2;
+                    switch (type)
+                    {
+                        case 0:
+                            Instantiate(corners[Random.Range(0, corners.Length)],
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
+                                Quaternion.Euler(0, 90f * Random.Range(0, 4), 0));
+                            break;
+                        case 1:
+                            Instantiate(edges[Random.Range(0, edges.Length)],
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
+                                Quaternion.Euler(0, 90f + 180f * Random.Range(0, 2), 0));
+                            break;
+                        case 2:
+                            Instantiate(edges[Random.Range(0, edges.Length)],
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
+                                Quaternion.Euler(0, 180f * Random.Range(0, 2), 0));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -158,6 +213,15 @@ public class GameController : MonoBehaviour
         Instantiate(colliderExit,
             new Vector3(edgeLength * (2 * mazeRows - 1) / 2f, 0f, edgeLength * mazeColumns) + transform.position,
             Quaternion.Euler(0, 90f + 180f * Random.Range(0, 2), 0));
+
+        GameObject p = Instantiate(playerPrefab, 
+            new Vector3(edgeLength * (mazeRows - 0.25f), 0f, edgeLength * (mazeColumns + 0.5f)),
+            Quaternion.Euler(0, 216f, 0));
+        p.GetComponent<SwatMovement>().enabled = false;
+        p.GetComponent<Animator>().SetInteger("AnimationState", 4);
+        p.GetComponent<Animator>().SetBool("IsSprinting", false);
+        p.GetComponent<Animator>().SetBool("NeedTurnLeft", false);
+        p.GetComponent<Animator>().SetBool("NeedTurnRight", false);
 
         for (int i = -1; i > -9; i--)
         {
