@@ -26,10 +26,31 @@ public class MainController : MonoBehaviour
         private set;
     }
 
+    public int SceneIndex
+    {
+        get;
+        private set;
+    }
+
+    public enum Theme { None, Sunset, Illusion };
+    public enum Level { None, Easy, Normal, Hard };
+
     public bool isBGMOff = false;
     public bool isSoundOff = false;
     public GameObject bgm;
     public Button bgmButton;
+    public Button startButton;
+    public Button themeSunsetButton;
+    public Button themeIllusionButton;
+    public Button levelEasyButton;
+    public Button levelNormalButton;
+    public Button levelHardButton;
+    public Text sizeText;
+    public Image backgroundImage;
+    public Sprite sunsetSprite;
+    public Sprite illusionSprite;
+    public Theme theme = Theme.None;
+    public Level level = Level.None;
 
     private bool hasGameStart = false;
 
@@ -48,6 +69,11 @@ public class MainController : MonoBehaviour
 
     private void Start()
     {
+        theme = Theme.None;
+        level = Level.None;
+        UpdateLevel();
+        UpdateStart();
+
         if (isBGMOff)
         {
             bgm.GetComponent<AudioSource>().volume = 0f;
@@ -81,34 +107,119 @@ public class MainController : MonoBehaviour
         }
     }
 
-    public void EasyStart()
+    public void SunsetTheme()
     {
         if (hasGameStart) return;
-        hasGameStart = true;
+        theme = Theme.Sunset;
+        SceneIndex = 1;
+        UpdateStart();
+        UpdateTheme();
+    }
+
+    public void IllusionTheme()
+    {
+        if (hasGameStart) return;
+        theme = Theme.Illusion;
+        SceneIndex = 2;
+        UpdateStart();
+        UpdateTheme();
+    }
+
+    public void EasyLevel()
+    {
+        if (hasGameStart) return;
+        level = Level.Easy;
         MazeColumns = 12;
         MazeRows = 12;
-        InitialTime = 245;
-        SceneManager.LoadScene(1);
+        InitialTime = 305;
+        UpdateLevel();
+        UpdateStart();
     }
 
-    public void NormalStart()
+    public void NormalLevel()
     {
         if (hasGameStart) return;
-        hasGameStart = true;
+        level = Level.Normal;
         MazeColumns = 18;
         MazeRows = 18;
-        InitialTime = 275;
-        SceneManager.LoadScene(1);
+        InitialTime = 350;
+        UpdateLevel();
+        UpdateStart();
     }
 
-    public void HardStart()
+    public void HardLevel()
     {
         if (hasGameStart) return;
-        hasGameStart = true;
+        level = Level.Hard;
         MazeColumns = 24;
         MazeRows = 24;
-        InitialTime = 305;
-        SceneManager.LoadScene(1);
+        InitialTime = 395;
+        UpdateLevel();
+        UpdateStart();
+    }
+
+    private void UpdateStart()
+    {
+        if (hasGameStart || theme == Theme.None || level == Level.None)
+            startButton.interactable = false;
+        else
+            startButton.interactable = true;
+    }
+
+    private void UpdateTheme()
+    {
+        themeSunsetButton.GetComponentInChildren<Text>().color = new Color(0.9f, 0.9f, 0.9f);
+        themeIllusionButton.GetComponentInChildren<Text>().color = new Color(0.9f, 0.9f, 0.9f);
+        backgroundImage.color = Color.white;
+
+        switch (theme)
+        {
+            case Theme.Sunset:
+                themeSunsetButton.GetComponentInChildren<Text>().color = themeSunsetButton.colors.highlightedColor;
+                backgroundImage.sprite = sunsetSprite;
+                break;
+            case Theme.Illusion:
+                themeIllusionButton.GetComponentInChildren<Text>().color = themeIllusionButton.colors.highlightedColor;
+                backgroundImage.color = new Color(0.9f, 0.9f, 0.9f);
+                backgroundImage.sprite = illusionSprite;
+                break;
+        }
+    }
+
+    private void UpdateLevel()
+    {
+        levelEasyButton.GetComponentInChildren<Text>().color = new Color(0.9f, 0.9f, 0.9f);
+        levelNormalButton.GetComponentInChildren<Text>().color = new Color(0.9f, 0.9f, 0.9f);
+        levelHardButton.GetComponentInChildren<Text>().color = new Color(0.9f, 0.9f, 0.9f);
+        sizeText.text = MazeColumns + " X " + MazeRows;
+
+        switch (level)
+        {
+            case Level.None:
+                sizeText.color = Color.white;
+                sizeText.text = "";
+                break;
+            case Level.Easy:
+                levelEasyButton.GetComponentInChildren<Text>().color = levelEasyButton.colors.highlightedColor;
+                sizeText.color = levelEasyButton.colors.pressedColor;
+                break;
+            case Level.Normal:
+                levelNormalButton.GetComponentInChildren<Text>().color = levelNormalButton.colors.highlightedColor;
+                sizeText.color = levelNormalButton.colors.pressedColor;
+                break;
+            case Level.Hard:
+                levelHardButton.GetComponentInChildren<Text>().color = levelHardButton.colors.highlightedColor;
+                sizeText.color = levelHardButton.colors.pressedColor;
+                break;
+        }
+    }
+
+    public void StartGame()
+    {
+        if (hasGameStart || theme == Theme.None || level == Level.None) return;
+        hasGameStart = true;
+        SceneManager.LoadScene(SceneIndex);
+        UpdateStart();
     }
 
     public void QuitGame()

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#define MOBILE
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -43,7 +44,9 @@ public class GameController : MonoBehaviour
     private float time;
     private int[,] m_Maze;
     private bool hasExited = false;
-    //private bool hasPressedShift = false;
+#if !MOBILE
+    private bool hasPressedShift = false;
+#endif
     private bool isTimeout = false;
     private bool isMenuShowed = false;
     private Vector2 distanceMaxValue;
@@ -67,7 +70,9 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        //Cursor.visible = false;
+#if !MOBILE
+        Cursor.visible = false;
+#endif
         MazeGenerator m_MazeGenerator = new MazeGenerator();
         bool fileExist = false;
 
@@ -309,12 +314,12 @@ public class GameController : MonoBehaviour
             MenuButton();
         }
     }
-    /*
+#if !MOBILE
     public void SetShiftPressed()
     {
         hasPressedShift = true;
     }
-    */
+#endif
 
     void Update()
     {
@@ -322,7 +327,8 @@ public class GameController : MonoBehaviour
         {
             MenuButton();
         }
-        /*
+
+#if !MOBILE
         if (isMenuShowed && Input.GetKeyDown(KeyCode.O))
         {
             SoundButton();
@@ -343,7 +349,7 @@ public class GameController : MonoBehaviour
             QuitButton();
             MenuButton();
         }
-        */
+#endif
     }
 
     void FixedUpdate()
@@ -397,12 +403,12 @@ public class GameController : MonoBehaviour
         {
             timeText.text += "Congraturations!";
         }
-        /*
+#if !MOBILE
         else if (!hasPressedShift)
         {
             timeText.text += "Press 'Left Shift' or 'Right Click' to dash.";
         }
-        */
+#endif
         else
         {
             if (mazeColumns == 12 && mazeRows == 12)
@@ -433,18 +439,24 @@ public class GameController : MonoBehaviour
             isMenuShowed = false;
             menu.SetActive(false);
             //menuButton.interactable = false;
-            //menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.11f, 0.98f);
-            //menuButtonText.text = "<color=#E6C700>◆</color> Menu";
+#if !MOBILE
+            menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.11f, 0.98f);
+            menuButtonText.text = "<color=#E6C700>◆</color> Menu";
+#else
             menuButtonText.text = "Menu <color=#E6C700>◆</color>";
+#endif
         }
         else
         {
             isMenuShowed = true;
             menu.SetActive(true);
             //menuButton.interactable = true;
-            //menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.15f, 0.98f);
-            //menuButtonText.text = "<color=#E6C700>◆</color> Hide Menu";
+#if !MOBILE
+            menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.15f, 0.98f);
+            menuButtonText.text = "<color=#E6C700>◆</color> Hide Menu";
+#else
             menuButtonText.text = "Hide Menu <color=#E6C700>◆</color>";
+#endif
         }
     }
 
@@ -455,16 +467,22 @@ public class GameController : MonoBehaviour
             MainController.mc.isSoundOff = true;
             GetComponent<AudioSource>().volume = 0f;
             player.GetComponent<AudioSource>().volume = 0f;
-            //soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
+#if !MOBILE
+            soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
+#else
             soundButtonText.text = "Sound (Off) <color=#E69900>◆</color>";
+#endif
         }
         else
         {
             MainController.mc.isSoundOff = false;
             GetComponent<AudioSource>().volume = 1f;
             player.GetComponent<AudioSource>().volume = 1f;
-            //soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
+#if !MOBILE
+            soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
+#else
             soundButtonText.text = "Sound (On) <color=#E69900>◆</color>";
+#endif
         }
     }
 

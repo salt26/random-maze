@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define MOBILE
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,9 @@ public class SwatMovement : MonoBehaviour
 
     //Transform lookAt;
     //Transform follow;
+#if MOBILE
     float vertical = 0f;
+#endif
 
     void Start()
     {
@@ -27,19 +30,21 @@ public class SwatMovement : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
     }
 
+#if MOBILE
     private void Update()
     {
         vertical = MobileJoystick.instance.moveDirection.y;
     }
+#endif
 
     void FixedUpdate()
     {
-        /*
+#if !MOBILE
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        */
-        //vertical = Input.GetAxis("Vertical");
+#else
         float horizontal = 0f;
+#endif
 
         bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
@@ -48,7 +53,12 @@ public class SwatMovement : MonoBehaviour
         int horizontalState = !hasHorizontalInput ? 1 : (horizontal > 0 ? 2 : 0);
         int verticalState = !hasVerticalInput ? 1 : (vertical > 0 ? 2 : 0);
         m_AnimationState = verticalState * 3 + horizontalState;
-        // bool isSprinting = (Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1)) && m_AnimationState == 7;
+
+#if !MOBILE
+        bool isSprinting = (Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1)) && m_AnimationState == 7;
+        
+        if (isMoving && isSprinting) GameController.gc.SetShiftPressed();
+#else
         bool isSprinting = MobileButton.instance.HasPressed && 
             vertical > 0f && m_AnimationState == 7;
 
@@ -62,14 +72,10 @@ public class SwatMovement : MonoBehaviour
         else
             MobileButton.instance.SetCircleColor(new Color(1f, 1f, 1f));
 
-        //if (isMoving && isSprinting) GameController.gc.SetShiftPressed();
-
-        //m_Movement.Set(horizontal, 0f, vertical);
-        //m_Movement.Normalize();
-
         GameController.gc.virtualCamera.GetComponent<Transform>().Rotate(
             new Vector3(0f, 1f, 0f) * 2.2f
             * Mathf.Pow(MobileJoystick.instance.moveDirection.x, 2) * Mathf.Sign(MobileJoystick.instance.moveDirection.x));
+#endif
 
         float angle = Mathf.Deg2Rad * mainCamera.transform.eulerAngles.y;
         m_Movement = Vector3.RotateTowards(transform.forward, 
