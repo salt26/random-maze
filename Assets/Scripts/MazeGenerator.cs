@@ -58,11 +58,11 @@ public class MazeGenerator
         return ratio;
     }
 
-    public int[,] FromDimensions(int rows, int cols, int innerRows, int innerCols)
+    public int[,] FromDimensions(int rows, int cols, int innerRows, int innerCols, float dropProb = 0f)
     {
         if(innerRows == 0 || innerCols == 0)
         {
-            return FromDimensions(rows, cols);
+            return FromDimensions(rows, cols, dropProb);
         }
         else
         {
@@ -104,11 +104,34 @@ public class MazeGenerator
             }
             UseAlgorithm(maze, vis, list);
 
+            if (dropProb > 0f)
+            {
+                for (int i = 2; i < 2 * rows; i += 2)
+                {
+                    for (int j = 1; j < 2 * cols; j += 2)
+                    {
+                        float p = Random.Range(0f, 1f);
+                        if (p < dropProb)
+                            maze[i, j] = 0;
+                    }
+                }
+
+                for (int i = 1; i < 2 * rows; i += 2)
+                {
+                    for (int j = 2; j < 2 * cols; j += 2)
+                    {
+                        float p = Random.Range(0f, 1f);
+                        if (p < dropProb)
+                            maze[i, j] = 0;
+                    }
+                }
+            }
+
             return maze;
         }
     }
 
-    public int[,] FromDimensions(int rows, int cols)
+    public int[,] FromDimensions(int rows, int cols, float dropProb = 0f)
     {
         int[,] maze = new int[2 * rows + 1, 2 * cols + 1];
         bool[,] vis = new bool[rows, cols];
@@ -120,7 +143,30 @@ public class MazeGenerator
         list.Add(x * cols + y);
         vis[x, y] = true;
         UseAlgorithm(maze, vis, list);
-        
+
+        if (dropProb > 0f)
+        {
+            for (int i = 2; i < 2 * rows; i += 2)
+            {
+                for (int j = 1; j < 2 * cols; j += 2)
+                {
+                    float p = Random.Range(0f, 1f);
+                    if (p < dropProb)
+                        maze[i, j] = 0;
+                }
+            }
+
+            for (int i = 1; i < 2 * rows; i += 2)
+            {
+                for (int j = 2; j < 2 * cols; j += 2)
+                {
+                    float p = Random.Range(0f, 1f);
+                    if (p < dropProb)
+                        maze[i, j] = 0;
+                }
+            }
+        }
+
         return maze;
     }
 

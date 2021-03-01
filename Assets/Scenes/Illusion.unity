@@ -2037,8 +2037,9 @@ MonoBehaviour:
   mazeFromFile: 0
   mazeColumns: 24
   mazeRows: 24
-  mazeInnerColumns: 2
-  mazeInnerRows: 2
+  mazeInnerColumns: 0
+  mazeInnerRows: 0
+  mazeDropProbability: 0.02
 --- !u!82 &930502570
 AudioSource:
   m_ObjectHideFlags: 0

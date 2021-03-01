@@ -1853,6 +1853,7 @@ MonoBehaviour:
   mazeRows: 24
   mazeInnerColumns: 2
   mazeInnerRows: 2
+  mazeDropProbability: 0
 --- !u!82 &930502570
 AudioSource:
   m_ObjectHideFlags: 0

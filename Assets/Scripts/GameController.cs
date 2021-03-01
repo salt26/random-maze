@@ -40,6 +40,7 @@ public class GameController : MonoBehaviour
     public int mazeRows = 15;
     public int mazeInnerColumns = 5;
     public int mazeInnerRows = 5;
+    public float mazeDropProbability = 0.02f;   // When this is 0.0f, only one way exists
 
     private float time;
     private int[,] m_Maze;
@@ -90,6 +91,7 @@ public class GameController : MonoBehaviour
         mazeRows = Mathf.Clamp(mazeRows, 5, 26);
         mazeInnerColumns = Mathf.Clamp(mazeInnerColumns, 0, mazeColumns);
         mazeInnerRows = Mathf.Clamp(mazeInnerRows, 0, mazeRows);
+        mazeDropProbability = Mathf.Clamp(mazeDropProbability, 0f, 1f);
 
         if (mazeFromFile)
         {
@@ -123,7 +125,7 @@ public class GameController : MonoBehaviour
         }
         if (!fileExist)
         {
-            m_Maze = m_MazeGenerator.FromDimensions(mazeColumns, mazeRows, mazeInnerColumns, mazeInnerRows);
+            m_Maze = m_MazeGenerator.FromDimensions(mazeColumns, mazeRows, mazeInnerColumns, mazeInnerRows, mazeDropProbability);
             // make two entrances
             m_Maze[0, 1] = 0;
             m_Maze[2 * mazeColumns, 2 * mazeRows - 1] = 0;
