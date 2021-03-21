@@ -1,4 +1,4 @@
-﻿#define MOBILE
+﻿//#define MOBILE
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿#define MOBILE
+﻿//#define MOBILE
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -646,7 +646,7 @@ MonoBehaviour:
   sizeText: {fileID: 56590796}
   backgroundImage: {fileID: 1684969527}
   sunsetSprite: {fileID: 21300000, guid: 853c2ffb1db9b4f4d80f4223efd0b9ea, type: 3}
-  desertSprite: {fileID: 21300000, guid: 5c0af66dabc940a4c92c91713a21bede, type: 3}
+  desertSprite: {fileID: 21300000, guid: 76d75a2f31c129d459b8a0b9d432fc09, type: 3}
   illusionSprite: {fileID: 21300000, guid: c71e1b9d074902b49a9b7b03017609c6, type: 3}
   theme: 0
   level: 0
