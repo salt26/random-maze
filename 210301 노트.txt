@@ -1,0 +1,41 @@
+<color=#E68A00></color> Normal
+0.48 0.56
+0.36 0.44
+0.24 0.32
+0.12 0.2
+
+0097E6
+00E64E
+00A8FF
+00FF57
+
+-----
+
+MazeController
+initial player position
+2.3 0 -4
+> 102.8 0 13.6 (Sunset, Illusion)
+> 122.8 0 43.4 (Desert)
+
+VirtualCamera
+body
+follow offset
+0 0 0.2
+> 8.8 12 -12
+
+VirtualCamera
+rotation
+0 0 0
+> 45 -34.9 0
+
+Canvas, TouchInput
+Enable
+> Disable
+
+initial rotation (GameController.cs 68)
+Quaternion.identity
+> Quaternion.Euler(0f, 180f, 0f)
+
+GameController.cs 1, SwatMovement.cs 1
+#define MOBILE
+> //...

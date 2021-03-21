@@ -1,4 +1,4 @@
-﻿//#define MOBILE
+﻿#define MOBILE
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
         }
         gc = this;
 
-        GameObject p = Instantiate(playerPrefab, initialPlayerPosition, Quaternion.identity);
+        GameObject p = Instantiate(playerPrefab, initialPlayerPosition, /*Quaternion.Euler(0f, 180f, 0f)*/ Quaternion.identity);
         player = p.GetComponent<SwatMovement>();
         player.mainCamera = mainCamera;
         virtualCamera.Follow = GameObject.FindGameObjectWithTag("Jaw").GetComponent<Transform>();
