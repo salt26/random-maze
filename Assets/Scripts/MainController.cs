@@ -32,7 +32,7 @@ public class MainController : MonoBehaviour
         private set;
     }
 
-    public enum Theme { None, Sunset, Illusion };
+    public enum Theme { None, Sunset, Desert, Illusion };
     public enum Level { None, Easy, Normal, Hard };
 
     public bool isBGMOff = false;
@@ -41,6 +41,7 @@ public class MainController : MonoBehaviour
     public Button bgmButton;
     public Button startButton;
     public Button themeSunsetButton;
+    public Button themeDesertButton;
     public Button themeIllusionButton;
     public Button levelEasyButton;
     public Button levelNormalButton;
@@ -48,6 +49,7 @@ public class MainController : MonoBehaviour
     public Text sizeText;
     public Image backgroundImage;
     public Sprite sunsetSprite;
+    public Sprite desertSprite;
     public Sprite illusionSprite;
     public Theme theme = Theme.None;
     public Level level = Level.None;
@@ -111,7 +113,16 @@ public class MainController : MonoBehaviour
     {
         if (hasGameStart) return;
         theme = Theme.Sunset;
-        SceneIndex = 1;
+        SceneIndex = (int)theme;    // 1
+        UpdateStart();
+        UpdateTheme();
+    }
+
+    public void DesertTheme()
+    {
+        if (hasGameStart) return;
+        theme = Theme.Desert;
+        SceneIndex = (int)theme;    // 2
         UpdateStart();
         UpdateTheme();
     }
@@ -120,7 +131,7 @@ public class MainController : MonoBehaviour
     {
         if (hasGameStart) return;
         theme = Theme.Illusion;
-        SceneIndex = 2;
+        SceneIndex = (int)theme;    // 3
         UpdateStart();
         UpdateTheme();
     }
@@ -169,6 +180,7 @@ public class MainController : MonoBehaviour
     private void UpdateTheme()
     {
         themeSunsetButton.GetComponentInChildren<Text>().color = new Color(0.9f, 0.9f, 0.9f);
+        themeDesertButton.GetComponentInChildren<Text>().color = new Color(0.9f, 0.9f, 0.9f);
         themeIllusionButton.GetComponentInChildren<Text>().color = new Color(0.9f, 0.9f, 0.9f);
         backgroundImage.color = Color.white;
 
@@ -177,6 +189,10 @@ public class MainController : MonoBehaviour
             case Theme.Sunset:
                 themeSunsetButton.GetComponentInChildren<Text>().color = themeSunsetButton.colors.highlightedColor;
                 backgroundImage.sprite = sunsetSprite;
+                break;
+            case Theme.Desert:
+                themeDesertButton.GetComponentInChildren<Text>().color = themeDesertButton.colors.highlightedColor;
+                backgroundImage.sprite = desertSprite;
                 break;
             case Theme.Illusion:
                 themeIllusionButton.GetComponentInChildren<Text>().color = themeIllusionButton.colors.highlightedColor;

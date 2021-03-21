@@ -397,7 +397,7 @@ Light:
   serializedVersion: 9
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.75
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1996,6 +1996,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   edgeLength: 5.3333335
+  edgeBasePosition: {x: 0, y: 0, z: 0}
+  edgeBaseRotation: {x: 0, y: 0, z: 0}
   useColorMatching: 1
   corners:
   - {fileID: 2902267935465025524, guid: ead761180c58aa14d8303e9a732836fc, type: 3}
@@ -2039,7 +2041,7 @@ MonoBehaviour:
   mazeRows: 24
   mazeInnerColumns: 0
   mazeInnerRows: 0
-  mazeDropProbability: 0.02
+  mazeDropProbability: 0.03
 --- !u!82 &930502570
 AudioSource:
   m_ObjectHideFlags: 0

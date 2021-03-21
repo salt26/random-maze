@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour
     public static GameController gc;
 
     public float edgeLength;
+    public Vector3 edgeBasePosition;
+    public Vector3 edgeBaseRotation;
     public bool useColorMatching;
     public GameObject[] corners;
     public GameObject[] edges;
@@ -148,8 +150,8 @@ public class GameController : MonoBehaviour
                     // i % 2 * 2 + j % 2 == 0
                     int r = Random.Range(0, corners.Length);
                     Instantiate(corners[r],
-                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
-                                Quaternion.Euler(0, 90f * Random.Range(0, 4), 0));
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position + edgeBasePosition,
+                                Quaternion.Euler(edgeBaseRotation.x, 90f * Random.Range(0, 4) + edgeBaseRotation.y, edgeBaseRotation.z));
                     mazeColor[i, j] = r;
                 }
             }
@@ -164,8 +166,8 @@ public class GameController : MonoBehaviour
                     if (j + 1 < m_Maze.GetLength(1) && mazeColor[i, j - 1] == mazeColor[i, j + 1])
                         r = mazeColor[i, j - 1];
                     Instantiate(edges[r],
-                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
-                                Quaternion.Euler(0, 90f + 180f * Random.Range(0, 2), 0));
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position + edgeBasePosition,
+                                Quaternion.Euler(edgeBaseRotation.x, 90f + 180f * Random.Range(0, 2) + edgeBaseRotation.y, edgeBaseRotation.z));
                 }
             }
 
@@ -179,8 +181,8 @@ public class GameController : MonoBehaviour
                     if (i + 1 < m_Maze.GetLength(0) && mazeColor[i - 1, j] == mazeColor[i + 1, j])
                         r = mazeColor[i - 1, j];
                     Instantiate(edges[r],
-                        new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
-                        Quaternion.Euler(0, 180f * Random.Range(0, 2), 0));
+                        new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position + edgeBasePosition,
+                        Quaternion.Euler(edgeBaseRotation.x, 180f * Random.Range(0, 2) + edgeBaseRotation.y, edgeBaseRotation.z));
                 }
             }
         }
@@ -196,18 +198,18 @@ public class GameController : MonoBehaviour
                     {
                         case 0:
                             Instantiate(corners[Random.Range(0, corners.Length)],
-                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
-                                Quaternion.Euler(0, 90f * Random.Range(0, 4), 0));
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position + edgeBasePosition,
+                                Quaternion.Euler(edgeBaseRotation.x, 90f * Random.Range(0, 4) + edgeBaseRotation.y, edgeBaseRotation.z));
                             break;
                         case 1:
                             Instantiate(edges[Random.Range(0, edges.Length)],
-                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
-                                Quaternion.Euler(0, 90f + 180f * Random.Range(0, 2), 0));
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position + edgeBasePosition,
+                                Quaternion.Euler(edgeBaseRotation.x, 90f + 180f * Random.Range(0, 2) + edgeBaseRotation.y, edgeBaseRotation.z));
                             break;
                         case 2:
                             Instantiate(edges[Random.Range(0, edges.Length)],
-                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position,
-                                Quaternion.Euler(0, 180f * Random.Range(0, 2), 0));
+                                new Vector3(edgeLength * j / 2f, 0f, edgeLength * i / 2f) + transform.position + edgeBasePosition,
+                                Quaternion.Euler(edgeBaseRotation.x, 180f * Random.Range(0, 2) + edgeBaseRotation.y, edgeBaseRotation.z));
                             break;
                         default:
                             break;
