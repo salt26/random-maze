@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,6 @@ public class SwatMovement : MonoBehaviour
 {
 
     public float turnSpeed = 5f;
-    public List<AudioClip> footsteps;
 
     [HideInInspector]
     public Camera mainCamera;
@@ -17,16 +17,34 @@ public class SwatMovement : MonoBehaviour
     Rigidbody m_Rigidbody;
     float footstepTiming = 0f;
 
+    //Transform lookAt;
+    //Transform follow;
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
+    float vertical = 0f;
+#endif
+
     void Start()
     {
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
     }
 
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
+    private void Update()
+    {
+        vertical = MobileJoystick.instance.moveDirection.y;
+    }
+#endif
+
     void FixedUpdate()
     {
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+#else
+        float horizontal = 0f;
+#endif
+
         bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
         bool isMoving = hasHorizontalInput || hasVerticalInput;
@@ -34,12 +52,30 @@ public class SwatMovement : MonoBehaviour
         int horizontalState = !hasHorizontalInput ? 1 : (horizontal > 0 ? 2 : 0);
         int verticalState = !hasVerticalInput ? 1 : (vertical > 0 ? 2 : 0);
         m_AnimationState = verticalState * 3 + horizontalState;
+
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
         bool isSprinting = (Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1)) && m_AnimationState == 7;
-
+        
         if (isMoving && isSprinting) GameController.gc.SetShiftPressed();
+#else
+        bool isSprinting = MobileButton.instance.HasPressed && 
+            vertical > 0f && m_AnimationState == 7;
 
-        //m_Movement.Set(horizontal, 0f, vertical);
-        //m_Movement.Normalize();
+        if (isMoving)
+            MobileJoystick.instance.SetCircleColor(new Color(1f, 0.8666667f, 0f));
+        else
+            MobileJoystick.instance.SetCircleColor(new Color(1f, 1f, 1f));
+
+        if (isSprinting)
+            MobileButton.instance.SetCircleColor(new Color(1f, 0.06666667f, 0f));
+        else
+            MobileButton.instance.SetCircleColor(new Color(1f, 1f, 1f));
+
+        GameController.gc.virtualCamera.GetComponent<Transform>().Rotate(
+            new Vector3(0f, 1f, 0f) * 2.2f
+            * Mathf.Pow(MobileJoystick.instance.moveDirection.x, 2) * Mathf.Sign(MobileJoystick.instance.moveDirection.x));
+#endif
+
         float angle = Mathf.Deg2Rad * mainCamera.transform.eulerAngles.y;
         m_Movement = Vector3.RotateTowards(transform.forward, 
             new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)), turnSpeed * Time.fixedDeltaTime, 0f);
@@ -57,10 +93,10 @@ public class SwatMovement : MonoBehaviour
         if (footstepTiming > 1f)
         {
             footstepTiming = 0f;
-            int index = Random.Range(0, footsteps.Count - 1);
-            GetComponent<AudioSource>().PlayOneShot(footsteps[index]);
-            footsteps.Add(footsteps[index]);
-            footsteps.RemoveAt(index);
+            int index = UnityEngine.Random.Range(0, GameController.gc.footsteps.Count - 1);
+            GetComponent<AudioSource>().PlayOneShot(GameController.gc.footsteps[index]);
+            GameController.gc.footsteps.Add(GameController.gc.footsteps[index]);
+            GameController.gc.footsteps.RemoveAt(index);
         }
 
         m_Animator.SetInteger("AnimationState", m_AnimationState);
