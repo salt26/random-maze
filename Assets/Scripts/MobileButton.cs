@@ -60,6 +60,7 @@ public class MobileButton : MonoBehaviour
         // Assign this instance to a static variable so you can access the movement direction directly at MobileDash.instance.isDashing
         instance = this;
 
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
         // This function will initialize canvas element along with the joystick button
         GameObject tmpObj = new GameObject("Canvas");
         tmpObj.transform.position = Vector3.zero;
@@ -111,6 +112,7 @@ public class MobileButton : MonoBehaviour
             0f,
             Screen.width * 0.5f,
             Screen.height * 0.5f);
+#endif
     }
 
     // Update is called once per frame
@@ -156,6 +158,7 @@ public class MobileButton : MonoBehaviour
         buttonTouch.currentTouchPos = Input.mousePosition;
 #endif
 
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
         // Moving
         if (buttonTouch.isActive)
         {
@@ -175,6 +178,7 @@ public class MobileButton : MonoBehaviour
             buttonTouch.mainButton.rectTransform.position = new Vector3(buttonTouch.defaultArea.x, buttonTouch.defaultArea.y);
             buttonTouch.backgroundCircle.rectTransform.position = new Vector3(Screen.width - marginRight, marginBottom, 0);
         }
+#endif
     }
 
     // Here we check if the clicked/tapped position is inside the touch detection area

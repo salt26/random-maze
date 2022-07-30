@@ -1,5 +1,4 @@
-﻿#define MOBILE
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -32,6 +31,7 @@ public class GameController : MonoBehaviour
     public AudioClip timeoutClip;
     public Camera mainCamera;
     public CinemachineVirtualCamera virtualCamera;
+    public GameObject touchInput;
 
     public float initialTime = 300f;
     public Vector3 initialPlayerPosition;
@@ -47,7 +47,7 @@ public class GameController : MonoBehaviour
     private float time;
     private int[,] m_Maze;
     private bool hasExited = false;
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
     private bool hasPressedShift = false;
 #endif
     private bool isTimeout = false;
@@ -73,8 +73,14 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
         Cursor.visible = false;
+        touchInput.SetActive(false);
+        virtualCamera.AddCinemachineComponent<CinemachinePOV>();
+        virtualCamera.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.m_MaxSpeed = 250f;
+        virtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_MaxSpeed = 250f;
+#else
+        touchInput.SetActive(true);
 #endif
         MazeGenerator m_MazeGenerator = new MazeGenerator();
         bool fileExist = false;
@@ -318,7 +324,7 @@ public class GameController : MonoBehaviour
             MenuButton();
         }
     }
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
     public void SetShiftPressed()
     {
         hasPressedShift = true;
@@ -332,7 +338,7 @@ public class GameController : MonoBehaviour
             MenuButton();
         }
 
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
         if (isMenuShowed && Input.GetKeyDown(KeyCode.O))
         {
             SoundButton();
@@ -407,7 +413,7 @@ public class GameController : MonoBehaviour
         {
             timeText.text += "Congraturations!";
         }
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
         else if (!hasPressedShift)
         {
             timeText.text += "Press 'Left Shift' or 'Right Click' to dash.";
@@ -443,7 +449,7 @@ public class GameController : MonoBehaviour
             isMenuShowed = false;
             menu.SetActive(false);
             //menuButton.interactable = false;
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
             menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.11f, 0.98f);
             menuButtonText.text = "<color=#E6C700>◆</color> Menu";
 #else
@@ -455,7 +461,7 @@ public class GameController : MonoBehaviour
             isMenuShowed = true;
             menu.SetActive(true);
             //menuButton.interactable = true;
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
             menuButton.GetComponent<RectTransform>().anchorMax = new Vector2(0.15f, 0.98f);
             menuButtonText.text = "<color=#E6C700>◆</color> Hide Menu";
 #else
@@ -471,7 +477,7 @@ public class GameController : MonoBehaviour
             MainController.mc.isSoundOff = true;
             GetComponent<AudioSource>().volume = 0f;
             player.GetComponent<AudioSource>().volume = 0f;
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
             soundButtonText.text = "<color=#E69900>◆</color> Sound (Off)";
 #else
             soundButtonText.text = "Sound (Off) <color=#E69900>◆</color>";
@@ -482,7 +488,7 @@ public class GameController : MonoBehaviour
             MainController.mc.isSoundOff = false;
             GetComponent<AudioSource>().volume = 1f;
             player.GetComponent<AudioSource>().volume = 1f;
-#if !MOBILE
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
             soundButtonText.text = "<color=#E69900>◆</color> Sound (On)";
 #else
             soundButtonText.text = "Sound (On) <color=#E69900>◆</color>";

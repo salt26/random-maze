@@ -59,6 +59,7 @@ public class MobileJoystick : MonoBehaviour
         // Assign this instance to a static variable so you can access the movement direction directly at MobileJoystick.instance.moveDirection
         instance = this;
 
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
         // This function will initialize canvas element along with the joystick button
         GameObject tmpObj = new GameObject("Canvas");
         tmpObj.transform.position = Vector3.zero;
@@ -110,6 +111,7 @@ public class MobileJoystick : MonoBehaviour
             0f,
             Screen.width * 0.5f,
             Screen.height * 0.8f);
+#endif
     }
 
     // Update is called once per frame
@@ -155,6 +157,7 @@ public class MobileJoystick : MonoBehaviour
         moveTouch.currentTouchPos = Input.mousePosition;
 #endif
 
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
         // Moving
         if (moveTouch.isActive)
         {
@@ -198,6 +201,7 @@ public class MobileJoystick : MonoBehaviour
             moveTouch.backgroundCircle.rectTransform.position = new Vector3(marginLeft, marginBottom, 0);
             moveDirection = Vector2.zero;
         }
+#endif
     }
 
     // Here we check if the clicked/tapped position is inside the joystick detection area
