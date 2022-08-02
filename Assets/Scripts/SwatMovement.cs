@@ -19,7 +19,7 @@ public class SwatMovement : MonoBehaviour
 
     //Transform lookAt;
     //Transform follow;
-#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1)
     float vertical = 0f;
 #endif
 
@@ -29,7 +29,7 @@ public class SwatMovement : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
     }
 
-#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1)
     private void Update()
     {
         vertical = MobileJoystick.instance.moveDirection.y;
@@ -38,7 +38,7 @@ public class SwatMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1))
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 #else
@@ -53,7 +53,7 @@ public class SwatMovement : MonoBehaviour
         int verticalState = !hasVerticalInput ? 1 : (vertical > 0 ? 2 : 0);
         m_AnimationState = verticalState * 3 + horizontalState;
 
-#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR)
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1))
         bool isSprinting = (Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1)) && m_AnimationState == 7;
         
         if (isMoving && isSprinting) GameController.gc.SetShiftPressed();

@@ -59,7 +59,7 @@ public class MobileJoystick : MonoBehaviour
         // Assign this instance to a static variable so you can access the movement direction directly at MobileJoystick.instance.moveDirection
         instance = this;
 
-#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1)
         // This function will initialize canvas element along with the joystick button
         GameObject tmpObj = new GameObject("Canvas");
         tmpObj.transform.position = Vector3.zero;
@@ -118,7 +118,7 @@ public class MobileJoystick : MonoBehaviour
     void Update()
     {
         // Handle joystick movement
-#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1)
         // Mobile touch input
         for (int i = 0; i < Input.touchCount; i++)
         {
@@ -157,7 +157,7 @@ public class MobileJoystick : MonoBehaviour
         moveTouch.currentTouchPos = Input.mousePosition;
 #endif
 
-#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1)
         // Moving
         if (moveTouch.isActive)
         {

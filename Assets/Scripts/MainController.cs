@@ -109,6 +109,16 @@ public class MainController : MonoBehaviour
         }
     }
 
+#if !((UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1))
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().name.Equals("Main") && !Cursor.visible)
+        {
+            Cursor.visible = true;
+        }
+    }
+#endif
+
     public void SunsetTheme()
     {
         if (hasGameStart) return;
