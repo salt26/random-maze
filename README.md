@@ -5,8 +5,7 @@
 
 ## Download the latest releases!
 
-* [Android (v.1.5.m)](https://github.com/salt26/random-maze/releases/tag/v.1.5.m)
-* [Windows (v.1.1)](https://github.com/salt26/random-maze/releases/tag/v.1.1)
+* [Android and Windows (v.1.6)](https://github.com/salt26/random-maze/releases/tag/v.1.6)
 
 ## Screenshots
 ![Sunset](https://github.com/salt26/random-maze/blob/mobile/Assets/Resources/SunsetTheme.png)
