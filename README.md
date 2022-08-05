@@ -2,7 +2,7 @@
 
 * 3D random maze game
 * Powered by [Thief and Police and Supporters](https://github.com/salt26/tapas)
-  * Thank you @cube-c for allowing me to use his 3D models.
+  * Thanks to @cube-c for allowing me to use his 3D models.
 
 ## Download the latest releases!
 
